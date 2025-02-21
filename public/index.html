@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+</head>
+<body>
+    <h1>CHATTING</h1>
+    <input type="text" placeholder="Enter your message" id="Message">
+    <button id="sendBtn">Press Maar</button>
+    <div id="messages"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();             
+        const sendBtn = document.getElementById('sendBtn');
+        const Message = document.getElementById('Message');
+
+          const allMessages = document.getElementById('messages')
+
+
+         socket.on('message',(message)=>{
+            const p = document.createElement('p')
+            p.innerText = message
+            allMessages.appendChild(p)
+         })
+
+        sendBtn.addEventListener('click', () => {
+            const message = Message.value.trim(); // Trim to remove unnecessary spaces
+            if (message) { // Prevent sending empty messages
+                console.log("Message sent:", message);
+                socket.emit('user_message', message); 
+                Message.value = ''; // Clear input after sending
+            }
+        });
+    </script>
+</body>
+</html>
